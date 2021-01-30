@@ -1,7 +1,11 @@
 import { createAction } from '@reduxjs/toolkit';
-const actionSetFilter = createAction('filter/addFilter', filter => ({
-  payload: filter,
+const actionAddContact = createAction('items/add', newContact => ({
+  payload: newContact,
 }));
+const actionRemoveContact = createAction('items/remove', id => ({
+  payload: id,
+}));
+
 const actionContactRequestStatus = createAction('items/request', flag => ({
   payload: flag,
 }));
@@ -13,7 +17,8 @@ const actionContactError = createAction('items/error', value => ({
 }));
 
 export {
-  actionSetFilter,
+  actionAddContact,
+  actionRemoveContact,
   actionContactRequestStatus,
   actionGetContactsSuccess,
   actionContactError,

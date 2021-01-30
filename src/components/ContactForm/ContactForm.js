@@ -2,28 +2,31 @@ import style from './ContactForm.module.css';
 import { toast } from 'react-toastify';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { parse, v4 as uuidv4 } from 'uuid';
-import { asyncOperationGetContacts } from '../../redux/contactsOperation';
-import { actionAddContact, actionSetToken } from '../../redux/reduxActions';
-import { postContacts } from '../../data/api-contacts';
-import { getContactMemo } from '../../redux/contact-selectors';
+import { handle } from 'managerToken/token';
+import { asyncOperationGetContacts } from '../../redux/reduxContacts/contactsOperation';
+import { actionAddContact } from 'redux/reduxContacts/contactsAction';
+import { postAddNewContact } from 'data/api-contacts';
+import { getContactMemo } from 'redux/reduxContacts/contact-selectors';
 
 function ContactForm() {
-  // Добавь селекторы в файл contacts-selectors.js in my case it dose not have sens))) state => state
-  // add memo just for fill all tasks   сделай мемоизацию селекторов там, где необходимо.
   const { items } = useSelector(getContactMemo);
-  const { token } = useSelector(state => state);
-  console.log(token, `persistor`);
-  const addToken = token => dispatch(actionSetToken(token));
+
+  const {
+    logIn: { token },
+  } = useSelector(state => state);
+
   const dispatch = useDispatch();
   const onAdd = async newContact => {
-    await postContacts(newContact);
+    await postAddNewContact(newContact);
     dispatch(actionAddContact(newContact));
   };
 
   useEffect(() => {
-    dispatch(asyncOperationGetContacts());
-  }, [dispatch]);
+    if (token !== null || token !== '') {
+      handle.setToken(token);
+      dispatch(asyncOperationGetContacts());
+    }
+  }, [dispatch, token]);
 
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -70,10 +73,9 @@ function ContactForm() {
     const isValidForm = validateFrom();
 
     if (!isValidForm) return;
-
-    const newContact = { id: uuidv4(), name, phone };
+    const number = phone;
+    const newContact = { name, number };
     resetForm();
-    addToken(newContact);
     return onAdd(newContact);
   };
 

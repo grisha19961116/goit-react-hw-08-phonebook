@@ -1,15 +1,13 @@
 import style from './ContactList.module.css';
-import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
-import { actionRemoveContact } from '../../redux/reduxActions';
-import { deletePostContacts } from '../../data/api-contacts';
+import { actionRemoveContact } from 'redux/reduxContacts/contactsAction';
+import { deleteContact } from 'data/api-contacts';
 
 const ContactList = () => {
-  // Добавь селекторы в файл contacts-selectors.js in my case it dose not have sens))) state => state
   const { items, filter, isLoading } = useSelector(state => state);
   const dispatch = useDispatch();
   const onRemove = async idContact => {
-    await deletePostContacts(idContact);
+    await deleteContact(idContact);
     dispatch(actionRemoveContact(idContact));
   };
 
@@ -18,30 +16,39 @@ const ContactList = () => {
       contact.name.toLowerCase().includes(filterInput.toLowerCase()),
     );
   };
+  const renderList = array => {
+    let data = array;
+    if (!data) {
+      data = getVisibleContacts(items, filter);
+    }
+    return (
+      <ul>
+        {data.map(({ id, name, number }, index) => {
+          return (
+            <li key={index}>
+              {name} : {number}
+              <button
+                onClick={() => {
+                  onRemove(id);
+                }}
+                className={style.button__delete}
+              >
+                Delete
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    );
+  };
 
   if (items.length === 0) return null;
 
   return (
     <>
       <h2>{isLoading}</h2>
-      <ul>
-        {filter !== '' &&
-          getVisibleContacts(items, filter).map(({ id, name, phone }) => {
-            return (
-              <li key={id}>
-                {name} : {phone}
-                <button
-                  onClick={() => {
-                    onRemove(id);
-                  }}
-                  className={style.button__delete}
-                >
-                  Delete
-                </button>
-              </li>
-            );
-          })}
-      </ul>
+      {filter !== '' && renderList(false)}
+      {filter === '' && renderList(items)}
     </>
   );
 };

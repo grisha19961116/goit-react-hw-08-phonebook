@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { actionSetFilter } from '../../redux/reduxActions';
 
 const Filter = () => {
-  // Добавь селекторы в файл contacts-selectors.js in my case it dose not have sens))) state => state
   const { filter } = useSelector(state => state);
   const dispatch = useDispatch();
   const handleFilterChange = valueInput =>
