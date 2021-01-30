@@ -13,7 +13,6 @@ const NavigationLinks = () => {
   };
   return (
     <div className={style.navigation__wrapper}>
-      {token !== '' && <NavigationLink to={'/contacts'} text="Contacts" />}
       {token !== '' && (
         <NavigationLink to={'/'} text="SignOut" onClick={signOut} name={name} />
       )}
