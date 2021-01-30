@@ -13,6 +13,7 @@ import style from './App.module.css';
 function App() {
   const {
     logIn: { token },
+    registration,
   } = useSelector(state => state);
   return (
     <BrowserRouter>
@@ -25,6 +26,7 @@ function App() {
           </Route>
           <Route exact path="/register">
             <RegistrationForm />
+            {registration && <Redirect to={'/login'} />}
           </Route>
           {token !== '' && (
             <Route path="/contacts">

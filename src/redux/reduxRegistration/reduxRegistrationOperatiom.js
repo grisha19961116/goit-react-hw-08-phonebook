@@ -12,6 +12,8 @@ const asyncRegistNewUser = newUser => async dispatch => {
     dispatch(actionAddNewUserSuccess(true));
   } catch (error) {
     dispatch(actionAddNewUserError(false));
+  } finally {
+    dispatch(actionAddNewUserSuccess(false));
   }
 };
 
