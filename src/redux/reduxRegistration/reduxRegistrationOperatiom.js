@@ -2,7 +2,7 @@ import {
   actionAddNewUserError,
   actionAddNewUserSuccess,
 } from './reduxRegistrationAction';
-import { postRegistUser } from 'data/api-contacts';
+import { postRegistUser } from 'data-api/api-contacts';
 import { handle } from 'managerToken/token';
 
 const asyncRegistNewUser = newUser => async dispatch => {

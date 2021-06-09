@@ -2,11 +2,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import ContactList from 'components/ContactList/ContactList.js';
-import ContactForm from 'components/ContactForm/ContactForm.js';
+import ContactForm from 'components/ContactForm/ContactForm.jsx';
 import RegistrationForm from 'components/Registration/RegistrationForm';
 import SignInForm from 'components/SignIn/SignIn';
 import NavigationLinks from 'components/NavigationLinks/NavigationLinks';
-import Filter from 'components/Filter/Filter.js';
+import Filter from 'components/Filter/Filter.jsx';
 import { useSelector } from 'react-redux';
 import style from './App.module.css';
 
@@ -30,16 +30,26 @@ function App() {
           </Route>
           {token !== '' && (
             <Route path="/contacts">
-              <h2>From Contact </h2>
+              <h2 className={style.title__form}>From Contact </h2>
               <ContactForm />
-              <h2>Contacts list</h2>
+              <h2 className={style.title_list}>Contacts list</h2>
               <Filter />
               <ContactList />
             </Route>
           )}
         </Switch>
       </Route>
-      <ToastContainer></ToastContainer>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </BrowserRouter>
   );
 }

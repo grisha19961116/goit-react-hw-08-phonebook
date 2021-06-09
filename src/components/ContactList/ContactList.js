@@ -1,7 +1,7 @@
 import style from './ContactList.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { actionRemoveContact } from 'redux/reduxContacts/contactsAction';
-import { deleteContact } from 'data/api-contacts';
+import { deleteContact } from 'data-api/api-contacts';
 
 const ContactList = () => {
   const { items, filter, isLoading } = useSelector(state => state);
@@ -22,19 +22,20 @@ const ContactList = () => {
       data = getVisibleContacts(items, filter);
     }
     return (
-      <ul>
-        {data.map(({ id, name, number }, index) => {
+      <ul className={style.contactUl}>
+        {data.map(({ id, name, number }) => {
           return (
-            <li key={index}>
-              {name} : {number}
-              <button
+            <li className={style.contactLi} key={id}>
+              <p className={style.name}>{name}</p>
+              <p className={style.phone}>{number}</p>
+              <p
                 onClick={() => {
                   onRemove(id);
                 }}
-                className={style.button__delete}
+                className={style.p__delete}
               >
                 Delete
-              </button>
+              </p>
             </li>
           );
         })}

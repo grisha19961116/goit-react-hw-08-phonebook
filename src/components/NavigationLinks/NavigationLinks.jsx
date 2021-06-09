@@ -14,7 +14,15 @@ const NavigationLinks = () => {
   return (
     <div className={style.navigation__wrapper}>
       {token !== '' && (
-        <NavigationLink to={'/'} text="SignOut" onClick={signOut} name={name} />
+        <>
+          {name && <span className={style.usr_name}>{`<<${name}>>`}</span>}
+          <NavigationLink
+            to={'/'}
+            text="SignOut"
+            onClick={signOut}
+            name={name}
+          />
+        </>
       )}
       {token === '' && <NavigationLink to={'/login'} text="LogIn" />}
       {token === '' && <NavigationLink to={'/register'} text="Register" />}

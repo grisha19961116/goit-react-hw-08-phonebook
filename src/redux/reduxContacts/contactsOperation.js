@@ -3,7 +3,7 @@ import {
   actionGetContactsSuccess,
   actionContactError,
 } from '../reduxActions';
-import { getAllContactsUser } from 'data/api-contacts';
+import { getAllContactsUser } from 'data-api/api-contacts';
 
 const asyncOperationGetContacts = () => async dispatch => {
   try {

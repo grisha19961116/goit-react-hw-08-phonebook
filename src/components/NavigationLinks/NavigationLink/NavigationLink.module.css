@@ -1,0 +1,20 @@
+.link_wrapper {
+  width: 100px;
+  display: flex;
+  justify-content: space-around;
+}
+.link_style {
+  color: rgb(250, 252, 253);
+  font-family: 'Mate SC', serif;
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: 500;
+}
+.link_style:hover {
+  color: rgb(13, 170, 233);
+}
+.link_active_style {
+  color: rgb(13, 170, 233);
+  border-bottom: solid 2px rgb(13, 170, 233);
+  padding-bottom: 4px;
+}

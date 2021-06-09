@@ -4,7 +4,7 @@ import {
   actionSignOutSuccess,
   actionSignOutError,
 } from './reduxSignInAndOut.js';
-import { postSignInUser, postSignOut } from 'data/api-contacts';
+import { postSignInUser, postSignOut } from 'data-api/api-contacts';
 
 import { handle } from 'managerToken/token';
 const asyncSignIn = newUser => async dispatch => {
