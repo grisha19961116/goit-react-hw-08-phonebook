@@ -1,16 +1,16 @@
-import style from './ContactForm.module.css';
-import { toast } from 'react-toastify';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import { handle } from 'managerToken/token';
-import { asyncOperationGetContacts } from '../../redux/reduxContacts/contactsOperation';
-import { actionAddContact } from 'redux/reduxContacts/contactsAction';
+
+import style from './ContactForm.module.css';
+import { handleAxios } from 'managerToken/token';
+import { asyncOperationGetContacts } from '../../redux/contacts/operations';
+import { actionAddContact } from 'redux/contacts/actions';
 import { postAddNewContact } from 'data-api/api-contacts';
-import { getContactMemo } from 'redux/reduxContacts/contact-selectors';
+import { getContactMemo } from 'redux/contacts/selectors';
 const validationSchema = yup.object({
   name: yup.string('Enter your name').required('Name is required'),
   number: yup
@@ -20,7 +20,7 @@ const validationSchema = yup.object({
 });
 
 function ContactForm() {
-  const { items } = useSelector(getContactMemo);
+  const contacts = useSelector(getContactMemo);
 
   const {
     logIn: { token },
@@ -34,7 +34,7 @@ function ContactForm() {
 
   useEffect(() => {
     if (token !== null || token !== '') {
-      handle.setToken(token);
+      handleAxios.setToken(token);
       dispatch(asyncOperationGetContacts());
     }
   }, [dispatch, token]);
@@ -55,7 +55,7 @@ function ContactForm() {
     },
     validationSchema: validationSchema,
     onSubmit: ({ name, number }) => {
-      const isExistContact = handleCheckUniqueContact(items, name);
+      const isExistContact = handleCheckUniqueContact(contacts, name);
       const newContact = { name, number };
       if (!isExistContact) {
         return;

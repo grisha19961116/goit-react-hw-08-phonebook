@@ -1,10 +1,12 @@
 import React from 'react';
 import { useFormik } from 'formik';
-import { useDispatch } from 'react-redux';
-import { asyncSignIn } from 'redux/reduxSignInAndOut/reduxSignInAndOutOperation';
+import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+
+import { getEmail } from 'redux/authorization/selectors';
+import { asyncSignIn } from 'redux/authorization/operations';
 import style from './SignIn.module.css';
 
 const validationSchema = yup.object({
@@ -20,19 +22,18 @@ const validationSchema = yup.object({
 
 const SignInForm = () => {
   const dispatch = useDispatch();
-  const signIn = async privateData => {
-    dispatch(await asyncSignIn(privateData));
+  const signIn = async credentials => {
+    dispatch(await asyncSignIn(credentials));
   };
+  const emailLc = useSelector(getEmail);
 
   const formik = useFormik({
     initialValues: {
-      email: '',
+      email: emailLc !== '' ? emailLc : '',
       password: '',
     },
     validationSchema: validationSchema,
-    onSubmit: emailPassword => {
-      signIn(emailPassword);
-    },
+    onSubmit: credentials => signIn(credentials),
   });
 
   return (

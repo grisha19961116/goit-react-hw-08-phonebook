@@ -2,17 +2,13 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { persistStore } from 'redux-persist';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { rootReducer } from './rootReducer';
 
-const composeEnhancers = composeWithDevTools({
-  // Specify here name, actionsBlacklist, actionsCreators and other options
-});
+import { rootReducer } from './rootReducer/rootReducer';
+
+const composeEnhancers = composeWithDevTools({});
 const store = createStore(
   rootReducer,
-  composeEnhancers(
-    applyMiddleware(thunk),
-    // other store enhancers if any
-  ),
+  composeEnhancers(applyMiddleware(thunk)),
 );
 const persistor = persistStore(store);
 export { store, persistor };

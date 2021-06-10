@@ -1,12 +1,13 @@
 import React from 'react';
 import { useFormik } from 'formik';
-import { toast } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
-import asyncRegistNewUser from 'redux/reduxRegistration/reduxRegistrationOperatiom';
+import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+
+import { asyncRegistNewUser } from 'redux/authorization/operations';
 import style from './RegistrationForm.module.css';
+
 const validationSchema = yup.object({
   email: yup
     .string('Enter your email')
@@ -23,10 +24,9 @@ const validationSchema = yup.object({
 });
 
 const RegistrationForm = () => {
-  const { registration } = useSelector(state => state);
   const dispatch = useDispatch();
-  const onRegisteration = async dataFrom => {
-    dispatch(await asyncRegistNewUser(dataFrom));
+  const onRegisteration = async user => {
+    dispatch(await asyncRegistNewUser(user));
   };
   const formik = useFormik({
     initialValues: {
@@ -39,10 +39,6 @@ const RegistrationForm = () => {
       onRegisteration(filledForm);
     },
   });
-
-  if (registration) {
-    toast('Registration was successful our congratulation');
-  }
 
   return (
     <div>

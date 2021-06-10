@@ -1,5 +1,6 @@
 const axios = require('axios');
-export const handle = {
+
+export const handleAxios = {
   setToken(token) {
     axios.defaults.headers.common.Authorization = `Bearer ${token}`;
   },

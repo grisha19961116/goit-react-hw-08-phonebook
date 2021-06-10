@@ -6,12 +6,13 @@ const actionSignInSuccess = createAction('signIn/success', value => ({
 const actionSignInError = createAction('signIn/error', value => ({
   payload: value,
 }));
-const actionSignOutSuccess = createAction('signIn/success', value => ({
+const actionSignOutSuccess = createAction('signOut/success', value => ({
   payload: value,
 }));
-const actionSignOutError = createAction('signIn/error', value => ({
+const actionSignOutError = createAction('signOut/error', value => ({
   payload: value,
 }));
+
 export {
   actionSignInSuccess,
   actionSignInError,

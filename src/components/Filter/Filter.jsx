@@ -1,9 +1,10 @@
-import style from './Filter.module.css';
 import { useDispatch } from 'react-redux';
-import { actionSetFilter } from 'redux/reduxActions';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import Field from '@material-ui/core/TextField';
+
+import style from './Filter.module.css';
+import { actionSetFilter } from 'redux/filter/actions';
 const validationSchema = yup.object({
   name: yup.string('Enter your name').required('Name is required'),
 });

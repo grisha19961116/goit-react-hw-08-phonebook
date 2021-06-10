@@ -1,12 +1,13 @@
 import { useSelector, useDispatch } from 'react-redux';
+
 import style from './NavigationLinks.module.css';
 import NavigationLink from './NavigationLink/NavigationLink';
-import { asyncSignOut } from 'redux/reduxSignInAndOut/reduxSignInAndOutOperation';
+import { asyncSignOut } from 'redux/authorization/operations';
+import { getToken, getName } from 'redux/authorization/selectors';
 
 const NavigationLinks = () => {
-  const {
-    logIn: { token, name },
-  } = useSelector(state => state);
+  const token = useSelector(getToken);
+  const name = useSelector(getName);
   const dispatch = useDispatch();
   const signOut = async () => {
     dispatch(await asyncSignOut());
@@ -17,7 +18,7 @@ const NavigationLinks = () => {
         <>
           {name && <span className={style.usr_name}>{`<<${name}>>`}</span>}
           <NavigationLink
-            to={'/'}
+            to={'/login'}
             text="SignOut"
             onClick={signOut}
             name={name}
