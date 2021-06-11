@@ -9,18 +9,12 @@ const postSignInUser = async credentials => {
   const { data } = await axios.post(`/users/login`, credentials);
   return data;
 };
-const postSignOut = async () => {
-  await axios.post(`/users/logout`);
-};
-const postAddNewContact = async contact => {
-  const data = await axios.post(`/contacts`, contact);
-  console.log(data, `data`);
-};
-const deleteContact = async id => {
-  console.log(id, `id`);
-  const data = await axios.delete(`/contacts/${id}`);
-  console.log(data, `data delete`);
-};
+const postSignOut = async () => await axios.post(`/users/logout`);
+
+const postAddNewContact = async contact =>
+  await axios.post(`/contacts`, contact);
+
+const deleteContact = async id => await axios.delete(`/contacts/${id}`);
 
 const getAllContactsUser = async () => {
   const { data } = await axios.get(`/contacts`);

@@ -7,21 +7,19 @@ import {
   actionSignOutError,
 } from './actions.js';
 
+const initialState = { name: '', token: '', email: '' };
+
 const reducerSignInAndOut = createReducer(
   { name: '', token: '', email: '' },
   {
     [actionSignInSuccess]: (_, { payload }) => {
       return payload;
     },
-    [actionSignInError]: ({ email }) => {
-      return { name: '', token: '', email };
-    },
+    [actionSignInError]: () => initialState,
     [actionSignOutSuccess]: ({ email }, _) => {
       return { name: '', token: '', email };
     },
-    [actionSignOutError]: ({ email }) => {
-      return { name: '', token: '', email };
-    },
+    [actionSignOutError]: () => initialState,
   },
 );
 

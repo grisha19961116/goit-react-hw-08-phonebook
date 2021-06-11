@@ -1,0 +1,33 @@
+.contact_table {
+  text-align: center;
+  padding: 10px 0;
+  font-family: 'Mate SC', serif;
+  display: flex;
+  justify-content: space-around;
+  font-size: 20px;
+  border-collapse: separate;
+  border-spacing: 10px 8px;
+}
+
+.contact_name {
+  color: rgb(160, 255, 7);
+}
+.contact_number {
+  color: white;
+}
+.contact_update {
+  cursor: pointer;
+  background-color: rgb(12, 247, 63);
+  color: white;
+  border-radius: 10px;
+  border: solid 2px white;
+  width: 80px;
+}
+.contact_delete {
+  cursor: pointer;
+  background-color: rgb(247, 47, 12);
+  color: white;
+  border-radius: 10px;
+  border: solid 2px white;
+  width: 80px;
+}

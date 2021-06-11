@@ -10,7 +10,7 @@ const NavigationLinks = () => {
   const name = useSelector(getName);
   const dispatch = useDispatch();
   const signOut = async () => {
-    dispatch(await asyncSignOut());
+    dispatch(await asyncSignOut(name));
   };
   return (
     <div className={style.navigation__wrapper}>

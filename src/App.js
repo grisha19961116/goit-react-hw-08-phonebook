@@ -1,7 +1,7 @@
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import ContactList from 'components/ContactList/ContactList.jsx';
+import ContactTable from 'components/ContactTable/ContactTable.jsx';
 import ContactForm from 'components/ContactForm/ContactForm.jsx';
 import RegistrationForm from 'components/Registration/RegistrationForm';
 import SignInForm from 'components/SignIn/SignIn';
@@ -42,11 +42,11 @@ function App() {
         </Route>
         {token !== '' && (
           <Route exact path="/contacts">
-            <h2 className={style.title__form}>From Contact </h2>
+            <h2 className={style.title__form}>Form Contact </h2>
             <ContactForm />
             <h2 className={style.title_list}>Contacts list</h2>
             <Filter />
-            {isLoading ? <Loader /> : <ContactList />}
+            {isLoading ? <Loader /> : <ContactTable />}
           </Route>
         )}
       </Switch>

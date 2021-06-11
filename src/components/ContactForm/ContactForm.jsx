@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { toast } from 'react-toastify';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
@@ -10,26 +11,33 @@ import { handleAxios } from 'managerToken/token';
 import { asyncOperationGetContacts } from '../../redux/contacts/operations';
 import { actionAddContact } from 'redux/contacts/actions';
 import { postAddNewContact } from 'data-api/api-contacts';
+import { getToken } from 'redux/authorization/selectors';
 import { getContactMemo } from 'redux/contacts/selectors';
+
+const phoneRegExp = '^[0-9]+$';
+
 const validationSchema = yup.object({
-  name: yup.string('Enter your name').required('Name is required'),
+  name: yup
+    .string('Enter your name')
+    .required('Name is required')
+    .min(3, 'Minimal length 3')
+    .max(14, 'Maximal length 14'),
   number: yup
-    .number('Enter your number')
-    .min(8, 'Number should be of minimum 8 characters length')
-    .required('Number is required'),
+    .string('Enter your number')
+    .matches(phoneRegExp, 'Phone number is not valid')
+    .required('Number is required')
+    .min(10, 'Number should has 10 characters')
+    .max(10, 'Number should has 10 characters'),
 });
 
 function ContactForm() {
   const contacts = useSelector(getContactMemo);
-
-  const {
-    logIn: { token },
-  } = useSelector(state => state);
+  const token = useSelector(getToken);
 
   const dispatch = useDispatch();
-  const onAdd = async newContact => {
-    await postAddNewContact(newContact);
-    dispatch(actionAddContact(newContact));
+  const onAdd = async contact => {
+    await postAddNewContact(contact);
+    dispatch(actionAddContact(contact));
   };
 
   useEffect(() => {
@@ -39,13 +47,30 @@ function ContactForm() {
     }
   }, [dispatch, token]);
 
-  const handleCheckUniqueContact = (arrayItems, nameContact) => {
-    const isExistContact = !!arrayItems.find(
-      contact => contact.name === nameContact,
-    );
-    isExistContact && alert('Contact name is already exist');
-
-    return !isExistContact;
+  const handleCheckUniqueContact = (name, number) => {
+    const isExistName = contacts.some(contact => contact.name === name);
+    const isExistPhone = contacts.some(contact => contact.number === number);
+    isExistName &&
+      toast.warn('⚠️ You have contact with same name!', {
+        position: 'bottom-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    isExistPhone &&
+      toast.error('🚀 Number has been using!', {
+        position: 'bottom-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    return !isExistPhone;
   };
 
   const formik = useFormik({
@@ -55,11 +80,9 @@ function ContactForm() {
     },
     validationSchema: validationSchema,
     onSubmit: ({ name, number }) => {
-      const isExistContact = handleCheckUniqueContact(contacts, name);
+      const isExistContact = handleCheckUniqueContact(name, number);
       const newContact = { name, number };
-      if (!isExistContact) {
-        return;
-      }
+      if (!isExistContact) return;
       formik.values.name = '';
       formik.values.number = '';
       return onAdd(newContact);
@@ -97,7 +120,7 @@ function ContactForm() {
         variant="contained"
         type="submit"
       >
-        Add Contact
+        Create
       </Button>
     </form>
   );
