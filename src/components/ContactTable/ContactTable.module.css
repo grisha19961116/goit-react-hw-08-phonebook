@@ -11,13 +11,49 @@
 
 .contact_name {
   color: rgb(160, 255, 7);
+  position: relative;
+  width: 160px;
 }
 .contact_number {
+  width: 160px;
+  color: white;
+  position: relative;
+}
+
+.input_hidden {
+  display: block;
+  visibility: hidden;
+  height: 0;
+}
+.input_active {
+  visibility: visible;
+  display: block;
+  position: absolute;
+  left: 0;
+  padding-left: 8px;
+  top: 2px;
+  outline: none;
+  border: none;
+  border-radius: 10px;
+  max-width: 100%;
+  height: auto;
+  background-color: rgb(10, 10, 10);
+  border: solid 2px white;
   color: white;
 }
+
 .contact_update {
   cursor: pointer;
   background-color: rgb(12, 247, 63);
+  color: white;
+  border-radius: 10px;
+  border: solid 2px white;
+  width: 80px;
+}
+
+.contact_update_active {
+  cursor: pointer;
+  background-color: rgb(247, 171, 7);
   color: white;
   border-radius: 10px;
   border: solid 2px white;
@@ -30,4 +66,8 @@
   border-radius: 10px;
   border: solid 2px white;
   width: 80px;
+}
+.delete_no_cursor {
+  cursor: not-allowed;
+  pointer-events: none;
 }

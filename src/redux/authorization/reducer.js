@@ -9,18 +9,15 @@ import {
 
 const initialState = { name: '', token: '', email: '' };
 
-const reducerSignInAndOut = createReducer(
-  { name: '', token: '', email: '' },
-  {
-    [actionSignInSuccess]: (_, { payload }) => {
-      return payload;
-    },
-    [actionSignInError]: () => initialState,
-    [actionSignOutSuccess]: ({ email }, _) => {
-      return { name: '', token: '', email };
-    },
-    [actionSignOutError]: () => initialState,
+const reducerSignInAndOut = createReducer(initialState, {
+  [actionSignInSuccess]: (_, { payload }) => {
+    return payload;
   },
-);
+  [actionSignInError]: () => initialState,
+  [actionSignOutSuccess]: ({ email }, _) => {
+    return { name: '', token: '', email };
+  },
+  [actionSignOutError]: () => initialState,
+});
 
 export default reducerSignInAndOut;

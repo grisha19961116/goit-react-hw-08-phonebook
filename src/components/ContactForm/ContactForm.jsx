@@ -35,9 +35,9 @@ function ContactForm() {
   const token = useSelector(getToken);
 
   const dispatch = useDispatch();
-  const onAdd = async contact => {
-    await postAddNewContact(contact);
-    dispatch(actionAddContact(contact));
+  const onAddContact = async contact => {
+    const data = await postAddNewContact(contact);
+    dispatch(actionAddContact(data));
   };
 
   useEffect(() => {
@@ -81,11 +81,11 @@ function ContactForm() {
     validationSchema: validationSchema,
     onSubmit: ({ name, number }) => {
       const isExistContact = handleCheckUniqueContact(name, number);
-      const newContact = { name, number };
+      const contact = { name, number };
       if (!isExistContact) return;
       formik.values.name = '';
       formik.values.number = '';
-      return onAdd(newContact);
+      return onAddContact(contact);
     },
   });
 
