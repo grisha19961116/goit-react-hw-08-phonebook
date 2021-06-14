@@ -2,6 +2,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useState, createRef } from 'react';
 
 import style from './ContactTable.module.css';
+import {
+  handleCheckUniqueContact,
+  checkInputUpdate,
+} from '../../validation.js/validation';
 import { getVisibleContactsMemo } from '../../redux/contacts/selectors';
 import {
   actionRemoveContact,
@@ -15,7 +19,6 @@ const ContactTable = () => {
   const visibleContacts = useSelector(getVisibleContactsMemo);
   const [id, setId] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [refInput, setRefInput] = useState(false);
   const dispatch = useDispatch();
 
   const onRemove = async idUp => {
@@ -24,64 +27,104 @@ const ContactTable = () => {
     dispatch(actionRemoveContact(idUp));
   };
 
-  const onOpenUpdate = async (idUp, i) => {
+  const onOpenUpdate = async (idUp, i, isUsed) => {
     if (id && id !== idUp) return;
-    if (!refInput) {
-      const inputOne = document.getElementById(i + 'first');
-      const inputSecond = document.getElementById(i + 'second');
-      myRef.current = { inputOne, inputSecond };
-      setRefInput(true);
-    }
-    const ref = myRef.current;
 
-    const tdUpdate = document.getElementById(i + 'td-update');
     const tdName = document.getElementById(i + 'td-name');
     const tdNumber = document.getElementById(i + 'td-number');
-    const tdDelete = document.getElementById(i + 'td-delete');
+    const tdUpdateAll = document.getElementsByClassName(style.contact_update);
+    const tdDeleteAll = document.getElementsByClassName(style.contact_delete);
     const checkOne = document.getElementById(i + 'first');
     const checkSecond = document.getElementById(i + 'second');
-    if (!checkOne && !checkSecond) {
-      tdName.append(ref.inputOne);
-      tdNumber.append(ref.inputSecond);
-    }
+
     if (checkOne && checkSecond) {
       myRef.current = { inputOne: checkOne, inputSecond: checkSecond };
     }
-    let { inputOne, inputSecond } = myRef.current;
+
+    const { inputOne, inputSecond } = myRef.current;
     const name = inputOne.value;
     const number = inputSecond.value;
+    const contactUp = { name, number };
+    const contact = { id: idUp, name, number };
+    const arrayBtn = [...Array.from(tdUpdateAll), ...Array.from(tdDeleteAll)];
+
+    if (!checkOne && !checkSecond) {
+      tdName.append(inputOne);
+      tdNumber.append(inputSecond);
+    }
 
     setId(idUp);
     let check = isOpen;
     check = !check;
     setIsOpen(() => check);
-    // inputOne.defaultValue = name
-    // inputSecond.defaultValue = number
     if (check) {
+      arrayBtn.map(el => {
+        if (el.id === i + 'td-update') {
+          el.style.backgroundColor = 'rgb(247, 171, 7)';
+          el.textContent = 'Done';
+          return null;
+        }
+        el.style.pointerEvents = 'none';
+      });
       inputOne.classList.remove(style.input_hidden);
       inputSecond.classList.remove(style.input_hidden);
-      tdUpdate.classList.remove(style.contact_update);
-      tdDelete.classList.add(style.delete_no_cursor);
       inputOne.classList.add(style.input_active);
       inputSecond.classList.add(style.input_active);
-      tdUpdate.classList.add(style.contact_update_active);
-      tdUpdate.textContent = 'Done';
     }
     if (!check) {
-      const contactUp = { name, number };
+      try {
+        const isValid = await checkInputUpdate(contactUp);
+        if (!isValid) return setIsOpen(() => !check);
+      } catch (err) {
+        console.log(err);
+      }
+      if (
+        isUsed.name === contactUp.name &&
+        isUsed.number !== contactUp.number
+      ) {
+        const isExistContact = handleCheckUniqueContact(
+          visibleContacts,
+          name,
+          number,
+          false,
+          true,
+        );
+        setIsOpen(() => !check);
+        if (!isExistContact) return;
+      }
+      if (
+        isUsed.name !== contactUp.name &&
+        isUsed.number === contactUp.number
+      ) {
+        handleCheckUniqueContact(visibleContacts, name, number, true, false);
+      }
+      if (
+        isUsed.name !== contactUp.name &&
+        isUsed.number !== contactUp.number
+      ) {
+        const isExistContact = handleCheckUniqueContact(
+          visibleContacts,
+          name,
+          number,
+        );
+        setIsOpen(() => !check);
+        if (!isExistContact) return;
+      }
+      arrayBtn.map(el => {
+        if (el.id === i + 'td-update') {
+          el.style.backgroundColor = 'rgb(12, 247, 63)';
+          el.textContent = 'Update';
+        }
+        el.style.pointerEvents = '';
+      });
       await updateContact(idUp, contactUp);
-      const contact = { id: idUp, name, number };
       dispatch(actionUpdateContact(contact));
-      tdName.textContent = name;
-      tdNumber.textContent = number;
       inputOne.classList.remove(style.input_active);
       inputSecond.classList.remove(style.input_active);
-      tdDelete.classList.remove(style.delete_no_cursor);
-      tdUpdate.classList.remove(style.contact_update_active);
       inputOne.classList.add(style.input_hidden);
       inputSecond.classList.add(style.input_hidden);
-      tdUpdate.classList.add(style.contact_update);
-      tdUpdate.textContent = 'Update';
+      inputOne.defaultValue = '';
+      inputSecond.defaultValue = '';
       setId(null);
     }
   };
@@ -98,7 +141,7 @@ const ContactTable = () => {
                   id={i + 'first'}
                   className={style.input_hidden}
                   type="text"
-                  defaultValue=""
+                  defaultValue={name}
                 ></input>
               </td>
               <td id={i + 'td-number'} className={style.contact_number}>
@@ -107,13 +150,13 @@ const ContactTable = () => {
                   id={i + 'second'}
                   className={style.input_hidden}
                   type="tel"
-                  defaultValue=""
+                  defaultValue={number}
                 ></input>
               </td>
               <td
                 id={i + 'td-update'}
                 className={style.contact_update}
-                onClick={() => onOpenUpdate(id, i)}
+                onClick={() => onOpenUpdate(id, i, { name, number })}
               >
                 Update
               </td>

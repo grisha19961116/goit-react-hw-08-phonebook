@@ -1,25 +1,13 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import * as yup from 'yup';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 import { getEmail } from 'redux/authorization/selectors';
 import { asyncSignIn } from 'redux/authorization/operations';
+import { validationSchemaSignIn } from '../../validation.js/validation';
 import style from './SignIn.module.css';
-
-const validationSchema = yup.object({
-  email: yup
-    .string('Enter your email')
-    .email('Enter a valid email')
-    .required('Email is required'),
-  password: yup
-    .string('Enter your password')
-    .min(8, 'Password should be of minimum 8 characters length')
-    .max(20, 'Password should be less 20 characters')
-    .required('Password is required'),
-});
 
 const SignInForm = () => {
   const dispatch = useDispatch();
@@ -33,7 +21,7 @@ const SignInForm = () => {
       email: emailLc !== '' ? emailLc : '',
       password: '',
     },
-    validationSchema: validationSchema,
+    validationSchema: validationSchemaSignIn,
     onSubmit: credentials => signIn(credentials),
   });
 

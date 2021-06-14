@@ -1,27 +1,12 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
-import * as yup from 'yup';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
+import { validationSchemaRegistration } from '../../validation.js/validation';
 import { asyncRegistNewUser } from 'redux/authorization/operations';
 import style from './RegistrationForm.module.css';
-
-const validationSchema = yup.object({
-  email: yup
-    .string('Enter your email')
-    .email('Enter a valid email')
-    .required('Email is required'),
-  name: yup
-    .string('Enter your NickName')
-    .max(15, 'Nickname can not  be more than 15 charts')
-    .required('Nickname is required'),
-  password: yup
-    .string('Enter your password')
-    .min(8, 'Password should be of minimum 8 characters length')
-    .required('Password is required'),
-});
 
 const RegistrationForm = () => {
   const dispatch = useDispatch();
@@ -34,7 +19,7 @@ const RegistrationForm = () => {
       email: '',
       password: '',
     },
-    validationSchema: validationSchema,
+    validationSchema: validationSchemaRegistration,
     onSubmit: filledForm => {
       onRegisteration(filledForm);
     },

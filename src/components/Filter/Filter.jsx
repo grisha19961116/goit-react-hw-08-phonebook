@@ -11,8 +11,7 @@ const validationSchema = yup.object({
 
 const Filter = () => {
   const dispatch = useDispatch();
-  const handleFilterChange = valueInput =>
-    dispatch(actionSetFilter(valueInput));
+  const handleFilterChange = value => dispatch(actionSetFilter(value));
   const formik = useFormik({
     initialValues: {
       name: '',

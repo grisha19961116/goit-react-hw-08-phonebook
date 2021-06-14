@@ -31,7 +31,7 @@
   position: absolute;
   left: 0;
   padding-left: 8px;
-  top: 2px;
+  top: 0px;
   outline: none;
   border: none;
   border-radius: 10px;
@@ -51,14 +51,6 @@
   width: 80px;
 }
 
-.contact_update_active {
-  cursor: pointer;
-  background-color: rgb(247, 171, 7);
-  color: white;
-  border-radius: 10px;
-  border: solid 2px white;
-  width: 80px;
-}
 .contact_delete {
   cursor: pointer;
   background-color: rgb(247, 47, 12);
@@ -66,8 +58,4 @@
   border-radius: 10px;
   border: solid 2px white;
   width: 80px;
-}
-.delete_no_cursor {
-  cursor: not-allowed;
-  pointer-events: none;
 }
