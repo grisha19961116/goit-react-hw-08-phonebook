@@ -16,14 +16,17 @@ const reducerContacts = createReducer([], {
     contactUpdate[index] = payload;
     return contactUpdate;
   },
+
   [actionAddContact]: (state, { payload }) => {
     const contactsAdd = [...state, payload];
     return contactsAdd;
   },
+
   [actionRemoveContact]: (state, { payload }) => {
     const contactsRemove = [...state.filter(contact => contact.id !== payload)];
     return contactsRemove;
   },
+
   [actionGetContacts]: (_, { payload }) => {
     return payload;
   },

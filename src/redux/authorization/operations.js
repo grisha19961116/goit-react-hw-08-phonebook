@@ -15,6 +15,7 @@ import { handleAxios } from 'managerToken/token';
 
 const asyncSignOut = name => async dispatch => {
   let check = null;
+
   try {
     await postSignOut();
     handleAxios.removeToken();
@@ -49,6 +50,7 @@ const asyncSignOut = name => async dispatch => {
 
 const asyncSignIn = credentials => async dispatch => {
   let userName = null;
+
   try {
     const {
       token,
@@ -86,6 +88,7 @@ const asyncSignIn = credentials => async dispatch => {
 
 const asyncRegistNewUser = user => async dispatch => {
   const { name, email } = user;
+
   try {
     const { token } = await postRegistUser(user);
     handleAxios.setToken(token);

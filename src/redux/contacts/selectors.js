@@ -13,4 +13,4 @@ const getVisibleContactsMemo = createSelector(
     ),
 );
 
-export { getContactMemo, getState, getVisibleContactsMemo };
+export { getContactMemo, getState, getFilter, getVisibleContactsMemo };

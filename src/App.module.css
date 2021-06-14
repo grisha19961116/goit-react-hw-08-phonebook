@@ -13,9 +13,18 @@
   display: block;
   margin: 0 auto;
   text-align: center;
-  padding-bottom: 2%;
+  padding-bottom: 5px;
   padding-top: 2%;
   font-size: 30px;
+  color: whitesmoke;
+  font-family: 'Mate SC', serif;
+}
+.title_list_warn {
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+  padding-bottom: 1%;
+  font-size: 25px;
   color: whitesmoke;
   font-family: 'Mate SC', serif;
 }

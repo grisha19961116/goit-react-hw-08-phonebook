@@ -10,9 +10,9 @@ import style from './RegistrationForm.module.css';
 
 const RegistrationForm = () => {
   const dispatch = useDispatch();
-  const onRegisteration = async user => {
+  const onRegisteration = async user =>
     dispatch(await asyncRegistNewUser(user));
-  };
+
   const formik = useFormik({
     initialValues: {
       name: '',

@@ -10,9 +10,10 @@ import {
   validationSchemaContact,
 } from '../../validation.js/validation';
 import { handleAxios } from 'managerToken/token';
-import { asyncOperationGetContacts } from '../../redux/contacts/operations';
-import { actionAddContact } from 'redux/contacts/actions';
-import { postAddNewContact } from 'data-api/api-contacts';
+import {
+  asyncOperationGetContacts,
+  asyncOperationAddContact,
+} from '../../redux/contacts/operations';
 import { getToken } from 'redux/authorization/selectors';
 import { getContactMemo } from 'redux/contacts/selectors';
 
@@ -21,10 +22,8 @@ function ContactForm() {
   const token = useSelector(getToken);
 
   const dispatch = useDispatch();
-  const onAddContact = async contact => {
-    const data = await postAddNewContact(contact);
-    dispatch(actionAddContact(data));
-  };
+  const onAddContact = async contact =>
+    dispatch(await asyncOperationAddContact(contact));
 
   useEffect(() => {
     if (token !== null || token !== '') {

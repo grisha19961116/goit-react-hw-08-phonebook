@@ -45,8 +45,12 @@ function App() {
             <h2 className={style.title__form}>Form Contact </h2>
             <ContactForm />
             <h2 className={style.title_list}>Contacts list</h2>
+            <h3 className={style.title_list_warn}>
+              * Contact updates are only available with an empty filter *
+            </h3>
             <Filter />
-            {isLoading ? <Loader /> : <ContactTable />}
+            <ContactTable />
+            {isLoading && <Loader />}
           </Route>
         )}
       </Switch>

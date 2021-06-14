@@ -18,9 +18,10 @@ const postAddNewContact = async contact => {
 
 const deleteContact = async id => await axios.delete(`/contacts/${id}`);
 
-const updateContact = async (id, contact) =>
-  await axios.patch(`/contacts/${id}`, contact);
-
+const postUpdateContact = async (id, contact) => {
+  const { data } = await axios.patch(`/contacts/${id}`, contact);
+  return data;
+};
 const getAllContactsUser = async () => {
   const { data } = await axios.get(`/contacts`);
   return data;
@@ -32,6 +33,6 @@ export {
   postSignOut,
   getAllContactsUser,
   postAddNewContact,
-  updateContact,
+  postUpdateContact,
   deleteContact,
 };

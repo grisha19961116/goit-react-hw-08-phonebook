@@ -6,57 +6,65 @@ import {
   handleCheckUniqueContact,
   checkInputUpdate,
 } from '../../validation.js/validation';
-import { getVisibleContactsMemo } from '../../redux/contacts/selectors';
 import {
-  actionRemoveContact,
-  actionUpdateContact,
-} from 'redux/contacts/actions';
-import { deleteContact, updateContact } from 'data-api/api-contacts';
+  getVisibleContactsMemo,
+  getFilter,
+} from '../../redux/contacts/selectors';
+import {
+  asyncOperationRemoveContact,
+  asyncOperationUpdateContact,
+} from '../../redux/contacts/operations';
 
 const myRef = createRef();
 
 const ContactTable = () => {
   const visibleContacts = useSelector(getVisibleContactsMemo);
+  const filter = useSelector(getFilter);
   const [id, setId] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
 
   const onRemove = async idUp => {
     if (id && id !== idUp) return;
-    await deleteContact(idUp);
-    dispatch(actionRemoveContact(idUp));
+    myRef.current = null;
+    setIsOpen(false);
+    setId('');
+    dispatch(await asyncOperationRemoveContact(idUp));
   };
 
-  const onOpenUpdate = async (idUp, i, isUsed) => {
+  const onOpenUpdate = async (idUp, i, theContact) => {
+    if (filter !== '') return;
     if (id && id !== idUp) return;
 
     const tdName = document.getElementById(i + 'td-name');
     const tdNumber = document.getElementById(i + 'td-number');
     const tdUpdateAll = document.getElementsByClassName(style.contact_update);
     const tdDeleteAll = document.getElementsByClassName(style.contact_delete);
-    const checkOne = document.getElementById(i + 'first');
-    const checkSecond = document.getElementById(i + 'second');
+    const checkInputName = document.getElementById(i + 'first');
+    const checkInputNumber = document.getElementById(i + 'second');
 
-    if (checkOne && checkSecond) {
-      myRef.current = { inputOne: checkOne, inputSecond: checkSecond };
+    if (checkInputName && checkInputNumber) {
+      myRef.current = {
+        inputName: checkInputName,
+        inputNumber: checkInputNumber,
+      };
     }
 
-    const { inputOne, inputSecond } = myRef.current;
-    const name = inputOne.value;
-    const number = inputSecond.value;
-    const contactUp = { name, number };
-    const contact = { id: idUp, name, number };
+    const { inputName, inputNumber } = myRef.current;
+    const name = inputName.value;
+    const number = inputNumber.value;
+    const contact = { name, number };
     const arrayBtn = [...Array.from(tdUpdateAll), ...Array.from(tdDeleteAll)];
 
-    if (!checkOne && !checkSecond) {
-      tdName.append(inputOne);
-      tdNumber.append(inputSecond);
+    if (!checkInputName && !checkInputNumber) {
+      tdName.append(inputName);
+      tdNumber.append(inputNumber);
     }
 
     setId(idUp);
     let check = isOpen;
     check = !check;
-    setIsOpen(() => check);
+    setIsOpen(check);
     if (check) {
       arrayBtn.map(el => {
         if (el.id === i + 'td-update') {
@@ -66,22 +74,20 @@ const ContactTable = () => {
         }
         el.style.pointerEvents = 'none';
       });
-      inputOne.classList.remove(style.input_hidden);
-      inputSecond.classList.remove(style.input_hidden);
-      inputOne.classList.add(style.input_active);
-      inputSecond.classList.add(style.input_active);
+      inputName.classList.remove(style.input_hidden);
+      inputNumber.classList.remove(style.input_hidden);
+      inputName.classList.add(style.input_active);
+      inputNumber.classList.add(style.input_active);
     }
     if (!check) {
       try {
-        const isValid = await checkInputUpdate(contactUp);
-        if (!isValid) return setIsOpen(() => !check);
+        const isValid = await checkInputUpdate(contact);
+        if (!isValid) return setIsOpen(check);
       } catch (err) {
         console.log(err);
       }
-      if (
-        isUsed.name === contactUp.name &&
-        isUsed.number !== contactUp.number
-      ) {
+      const { theName, theNumber } = theContact;
+      if (theName === name && theNumber !== number) {
         const isExistContact = handleCheckUniqueContact(
           visibleContacts,
           name,
@@ -89,25 +95,19 @@ const ContactTable = () => {
           false,
           true,
         );
-        setIsOpen(() => !check);
+        setIsOpen(check);
         if (!isExistContact) return;
       }
-      if (
-        isUsed.name !== contactUp.name &&
-        isUsed.number === contactUp.number
-      ) {
+      if (theName !== name && theNumber === number) {
         handleCheckUniqueContact(visibleContacts, name, number, true, false);
       }
-      if (
-        isUsed.name !== contactUp.name &&
-        isUsed.number !== contactUp.number
-      ) {
+      if (theName !== name && theNumber !== number) {
         const isExistContact = handleCheckUniqueContact(
           visibleContacts,
           name,
           number,
         );
-        setIsOpen(() => !check);
+        setIsOpen(check);
         if (!isExistContact) return;
       }
       arrayBtn.map(el => {
@@ -117,14 +117,12 @@ const ContactTable = () => {
         }
         el.style.pointerEvents = '';
       });
-      await updateContact(idUp, contactUp);
-      dispatch(actionUpdateContact(contact));
-      inputOne.classList.remove(style.input_active);
-      inputSecond.classList.remove(style.input_active);
-      inputOne.classList.add(style.input_hidden);
-      inputSecond.classList.add(style.input_hidden);
-      inputOne.defaultValue = '';
-      inputSecond.defaultValue = '';
+      dispatch(await asyncOperationUpdateContact(idUp, contact));
+      inputName.classList.remove(style.input_active);
+      inputNumber.classList.remove(style.input_active);
+      inputName.classList.add(style.input_hidden);
+      inputNumber.classList.add(style.input_hidden);
+      myRef.current = null;
       setId(null);
     }
   };
@@ -156,7 +154,9 @@ const ContactTable = () => {
               <td
                 id={i + 'td-update'}
                 className={style.contact_update}
-                onClick={() => onOpenUpdate(id, i, { name, number })}
+                onClick={() =>
+                  onOpenUpdate(id, i, { theName: name, theNumber: number })
+                }
               >
                 Update
               </td>

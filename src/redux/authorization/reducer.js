@@ -13,10 +13,13 @@ const reducerSignInAndOut = createReducer(initialState, {
   [actionSignInSuccess]: (_, { payload }) => {
     return payload;
   },
+
   [actionSignInError]: () => initialState,
+
   [actionSignOutSuccess]: ({ email }, _) => {
     return { name: '', token: '', email };
   },
+
   [actionSignOutError]: () => initialState,
 });
 
