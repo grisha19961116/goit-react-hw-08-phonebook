@@ -1,11 +1,11 @@
 .loader {
-  position: absolute;
+  position: fixed;
   display: inline-block;
-  width: 100px;
-  height: 100px;
-  top: 60vh;
+  width: 5vw;
+  height: 5vh;
+  top: 90vh;
   left: 0;
   right: 0;
-  margin-left: auto;
+  margin-left: 42.5vw;
   margin-right: auto;
 }
