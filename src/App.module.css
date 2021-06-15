@@ -8,6 +8,8 @@
 
 canvas {
   position: absolute;
+  min-width: 100vw;
+  min-height: 100vh;
   z-index: -100;
   left: 0;
 }
