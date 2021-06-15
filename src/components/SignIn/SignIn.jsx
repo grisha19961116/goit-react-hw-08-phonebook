@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
+import { getLoad } from 'redux/loading/selectors';
 import { getEmail } from 'redux/authorization/selectors';
 import { asyncSignIn } from 'redux/authorization/operations';
 import { validationSchemaSignIn } from '../../validation.js/validation';
@@ -11,6 +12,7 @@ import style from './SignIn.module.css';
 
 const SignInForm = () => {
   const dispatch = useDispatch();
+  const isLoading = useSelector(getLoad);
   const signIn = async credentials => {
     dispatch(await asyncSignIn(credentials));
   };
@@ -55,6 +57,7 @@ const SignInForm = () => {
         color="primary"
         variant="contained"
         type="submit"
+        disabled={isLoading ? true : false}
       >
         Submit
       </Button>

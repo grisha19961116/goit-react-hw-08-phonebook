@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify';
+import { actionIsLoading } from '../loading/actions';
 import {
   actionSignInSuccess,
   actionSignInError,
@@ -13,9 +14,10 @@ import {
 
 import { handleAxios } from 'managerToken/token';
 
+const initialState = { name: '', token: '', email: '' };
+
 const asyncSignOut = name => async dispatch => {
   let check = null;
-
   try {
     await postSignOut();
     handleAxios.removeToken();
@@ -23,7 +25,7 @@ const asyncSignOut = name => async dispatch => {
     check = true;
   } catch (err) {
     check = false;
-    dispatch(actionSignOutError());
+    dispatch(actionSignOutSuccess(initialState));
   } finally {
     check === true &&
       toast.info(`👋 Goodby darling <<${name}>> !`, {
@@ -52,6 +54,7 @@ const asyncSignIn = credentials => async dispatch => {
   let userName = null;
 
   try {
+    dispatch(actionIsLoading(true));
     const {
       token,
       user: { name, email },
@@ -61,8 +64,9 @@ const asyncSignIn = credentials => async dispatch => {
     userName = name;
   } catch (err) {
     userName = null;
-    dispatch(actionSignInError());
+    dispatch(actionSignInSuccess(initialState));
   } finally {
+    dispatch(actionIsLoading(false));
     userName &&
       toast.success(`🤟 Hello darling <<${userName}>> !`, {
         position: 'bottom-right',
@@ -86,10 +90,11 @@ const asyncSignIn = credentials => async dispatch => {
   }
 };
 
-const asyncRegistNewUser = user => async dispatch => {
+const asyncRegistrationNewUser = user => async dispatch => {
   const { name, email } = user;
 
   try {
+    dispatch(actionIsLoading(true));
     const { token } = await postRegistUser(user);
     handleAxios.setToken(token);
     dispatch(actionSignInSuccess({ name, token, email }));
@@ -103,7 +108,7 @@ const asyncRegistNewUser = user => async dispatch => {
       progress: undefined,
     });
   } catch (error) {
-    dispatch(actionSignInError());
+    dispatch(actionSignInSuccess(initialState));
     toast.warn(`⚠️${email} Is right email?`, {
       position: 'top-right',
       autoClose: 3000,
@@ -113,7 +118,9 @@ const asyncRegistNewUser = user => async dispatch => {
       draggable: true,
       progress: undefined,
     });
+  } finally {
+    dispatch(actionIsLoading(false));
   }
 };
 
-export { asyncSignIn, asyncSignOut, asyncRegistNewUser };
+export { asyncSignIn, asyncSignOut, asyncRegistrationNewUser };

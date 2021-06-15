@@ -1,17 +1,19 @@
 import React from 'react';
 import { useFormik } from 'formik';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
+import { getLoad } from 'redux/loading/selectors';
 import { validationSchemaRegistration } from '../../validation.js/validation';
-import { asyncRegistNewUser } from 'redux/authorization/operations';
+import { asyncRegistrationNewUser } from 'redux/authorization/operations';
 import style from './RegistrationForm.module.css';
 
 const RegistrationForm = () => {
   const dispatch = useDispatch();
-  const onRegisteration = async user =>
-    dispatch(await asyncRegistNewUser(user));
+  const isLoading = useSelector(getLoad);
+  const onRegistration = async user =>
+    dispatch(await asyncRegistrationNewUser(user));
 
   const formik = useFormik({
     initialValues: {
@@ -20,9 +22,7 @@ const RegistrationForm = () => {
       password: '',
     },
     validationSchema: validationSchemaRegistration,
-    onSubmit: filledForm => {
-      onRegisteration(filledForm);
-    },
+    onSubmit: values => onRegistration(values),
   });
 
   return (
@@ -62,6 +62,7 @@ const RegistrationForm = () => {
           className={style.signIn_button}
           color="primary"
           variant="contained"
+          disabled={isLoading ? true : false}
           type="submit"
         >
           Submit
