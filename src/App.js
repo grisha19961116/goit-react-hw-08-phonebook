@@ -19,8 +19,8 @@ function App() {
   const isLoading = useSelector(getLoad);
 
   useEffect(() => {
-    window.addEventListener('DOMContentLoaded', canvasStars);
-    return () => window.removeEventListener('DOMContentLoaded', canvasStars);
+    document.addEventListener('load', canvasStars);
+    return () => document.removeEventListener('load', canvasStars);
   }, []);
 
   return (
