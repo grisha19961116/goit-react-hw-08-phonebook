@@ -37,6 +37,11 @@
   height: auto;
 }
 
+.input_show_password {
+  display: inline-block;
+  margin-right: 10px;
+}
+
 @media (min-width: 767px) {
   .signIn_form {
     width: 600px;

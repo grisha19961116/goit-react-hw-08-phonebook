@@ -8,6 +8,7 @@ import { getLoad } from 'redux/loading/selectors';
 import { getEmail } from 'redux/authorization/selectors';
 import { asyncSignIn } from 'redux/authorization/operations';
 import { validationSchemaSignIn } from '../../validation.js/validation';
+import { togglePassword } from 'helpers/helpers';
 import style from './SignIn.module.css';
 
 const SignInForm = () => {
@@ -40,17 +41,25 @@ const SignInForm = () => {
           error={formik.touched.email && Boolean(formik.errors.email)}
           helperText={formik.touched.email && formik.errors.email}
         />
-        <TextField
-          className={style.signIn_input}
-          id="password"
-          name="password"
-          label="Password..."
-          type="password"
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          error={formik.touched.password && Boolean(formik.errors.password)}
-          helperText={formik.touched.password && formik.errors.password}
-        />
+        <div>
+          <TextField
+            className={style.signIn_input}
+            id="password"
+            name="password"
+            label="Password..."
+            type="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
+          />
+          <input
+            className={style.input_show_password}
+            type="checkbox"
+            onClick={togglePassword}
+          />
+          Show password*
+        </div>
       </div>
       <Button
         className={style.signIn_button}

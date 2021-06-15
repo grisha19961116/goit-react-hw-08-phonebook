@@ -7,6 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import { getLoad } from 'redux/loading/selectors';
 import { validationSchemaRegistration } from '../../validation.js/validation';
 import { asyncRegistrationNewUser } from 'redux/authorization/operations';
+import { togglePassword } from 'helpers/helpers';
 import style from './RegistrationForm.module.css';
 
 const RegistrationForm = () => {
@@ -57,6 +58,14 @@ const RegistrationForm = () => {
             error={formik.touched.password && Boolean(formik.errors.password)}
             helperText={formik.touched.password && formik.errors.password}
           />
+          <div>
+            <input
+              className={style.input_show_password}
+              type="checkbox"
+              onClick={togglePassword}
+            />
+            Show password*
+          </div>
         </div>
         <Button
           className={style.signIn_button}

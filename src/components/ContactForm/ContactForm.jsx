@@ -40,8 +40,8 @@ function ContactForm() {
     validationSchema: validationSchemaContact,
     onSubmit: ({ name, number }) => {
       const isExistContact = handleCheckUniqueContact(contacts, name, number);
-      const contact = { name, number };
       if (!isExistContact) return;
+      const contact = { name, number };
       formik.values.name = '';
       formik.values.number = '';
       return onAddContact(contact);
