@@ -16,10 +16,7 @@ ReactDOM.render(
     <PersistGate loading={null} persistor={persistor}>
       <Provider store={store}>
         <BrowserRouter>
-          <>
-            <canvas id="canvas"></canvas>
-            <App />
-          </>
+          <App />
           <ToastContainer
             position="top-right"
             autoClose={3000}

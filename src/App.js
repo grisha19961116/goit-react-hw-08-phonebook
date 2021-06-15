@@ -17,7 +17,6 @@ import style from './App.module.css';
 function App() {
   const token = useSelector(getToken);
   const isLoading = useSelector(getLoad);
-  window.addEventListener('DOMContentLoaded', canvasStars);
 
   useEffect(() => {
     window.addEventListener('DOMContentLoaded', canvasStars);
@@ -27,6 +26,7 @@ function App() {
   return (
     <Route path={'/'}>
       <div className={style.wrapped_content_absolute}>
+        <canvas id="canvas"></canvas>
         <NavigationLinks />
         <Switch>
           {token !== '' && (

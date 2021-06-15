@@ -6,15 +6,18 @@
   justify-content: space-around;
   font-size: 20px;
   border-collapse: separate;
-  border-spacing: 10px 8px;
+  border-spacing: 10px 16px;
 }
 
 .contact_name {
-  color: white;
+  color: rgb(70, 250, 15);
   border-bottom: solid 2px #33c9f7;
   border-radius: 10px;
   position: relative;
   width: 160px;
+}
+.contact_name:hover {
+  border: solid 2px #33c9f7;
 }
 .contact_number {
   width: 160px;
@@ -22,6 +25,9 @@
   border-bottom: solid 2px #c815ec;
   border-radius: 10px;
   position: relative;
+}
+.contact_number:hover {
+  border: solid 2px #c815ec;
 }
 
 .input_hidden {

@@ -1,9 +1,17 @@
+@import 'https://fonts.googleapis.com/css?family=Mountains+of+Christmas';
+
 .wrapped_content_absolute {
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  z-index: 20;
+  position: relative;
+  min-width: 100vw;
+  min-height: 100vh;
 }
+
+canvas {
+  position: absolute;
+  z-index: -100;
+  left: 0;
+}
+
 .title__form {
   font-size: 5em;
 }
