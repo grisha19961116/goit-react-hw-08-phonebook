@@ -2,7 +2,7 @@
   width: 100%;
   height: auto;
   display: flex;
-  justify-content: right;
+  justify-content: flex-end;
   padding-right: 30px;
   padding-top: 20px;
   margin-bottom: 20px;
