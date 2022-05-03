@@ -1,11 +1,6 @@
 import { toast } from 'react-toastify';
 import { actionIsLoading } from '../loading/actions';
-import {
-  actionSignInSuccess,
-  actionSignInError,
-  actionSignOutSuccess,
-  actionSignOutError,
-} from './actions.js';
+import { actionSignInSuccess, actionSignOutSuccess } from './actions.js';
 import {
   postSignInUser,
   postSignOut,

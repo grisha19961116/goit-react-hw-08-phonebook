@@ -3,6 +3,7 @@ import { createSelector } from 'reselect';
 const getContact = state => state.contacts;
 const getState = state => state;
 const getFilter = state => state.filter;
+
 const getContactMemo = createSelector([getContact], contacts => contacts);
 
 const getVisibleContactsMemo = createSelector(
